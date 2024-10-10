@@ -5,14 +5,32 @@ function IMCCalculator() {
   const [height, setHeight] = useState('');
   const [imc, setImc] = useState(null);
   const [classification, setClassification] = useState('');
+  const [error, setError] = useState('');
+
+  const validateInputs = () => {
+    if (!weight || !height) {
+      return 'Por favor, preencha todos os campos.';
+    }
+    if (weight <= 0 || height <= 0) {
+      return 'Peso e altura devem ser maiores que zero.';
+    }
+    return '';
+  };
 
   const calculateIMC = () => {
-    if (weight && height) {
-      const heightInMeters = height / 100;
-      const imcValue = (weight / (heightInMeters * heightInMeters)).toFixed(2);
-      setImc(imcValue);
-      classifyIMC(imcValue);
+    const validationError = validateInputs();
+    if (validationError) {
+      setError(validationError);
+      setImc(null); // Limpar o IMC se houver erro
+      setClassification(''); // Limpar a classificação se houver erro
+      return;
     }
+    setError(''); // Limpar qualquer erro anterior
+
+    const heightInMeters = height / 100;
+    const imcValue = (weight / (heightInMeters * heightInMeters)).toFixed(2);
+    setImc(imcValue);
+    classifyIMC(imcValue);
   };
 
   const classifyIMC = (imcValue) => {
@@ -59,6 +77,9 @@ function IMCCalculator() {
         </label>
       </div>
       <button onClick={calculateIMC}>Calcular IMC</button>
+
+      {error && <p style={{ color: 'red' }}>{error}</p>} {/* Exibe mensagem de erro em vermelho */}
+
       {imc && (
         <div>
           <p>Seu IMC é: {imc}</p>
