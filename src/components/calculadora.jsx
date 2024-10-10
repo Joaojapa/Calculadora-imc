@@ -9,7 +9,7 @@ function IMCCalculator() {
 
   const validateInputs = () => {
     if (!weight || !height) {
-      return 'Por favor, preencha todos os campos.';
+      return 'ERRO!';
     }
     if (weight <= 0 || height <= 0) {
       return 'Peso e altura devem ser maiores que zero.';
